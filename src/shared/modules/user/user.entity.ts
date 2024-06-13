@@ -30,9 +30,9 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     type: () => String,
     enum: UserRole,
     required: true,
-    default: UserRole['basic']
+    default: UserRole.basic
   })
-  public role!: UserRole;
+  public role: UserRole;
 
   constructor(userData: User) {
     super();

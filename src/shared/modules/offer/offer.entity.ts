@@ -17,59 +17,59 @@ export interface OfferEntity extends defaultClasses.Base {}
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true, default: '', trim: true })
-  public title!: string;
+  public title: string;
 
   @prop({ required: true, default: '', trim: true })
-  public description!: string;
+  public description: string;
 
   @prop({ required: false })
-  public publishedAt!: Date;
+  public publishedAt: Date;
 
   @prop({
     ref: CityEntity,
     required: true
   })
-  public cityId!: Ref<CityEntity>;
+  public cityId: Ref<CityEntity>;
 
   @prop({ required: true })
-  public previewImage!: string;
+  public previewImage: string;
 
   @prop({ required: true, allowMixed: Severity.ALLOW })
-  public images!: string[];
+  public images: string[];
 
   @prop({ required: true, default: false })
-  public isPremium!: boolean;
+  public isPremium: boolean;
 
   @prop({ required: true, default: 0 })
-  public rating!: number;
+  public rating: number;
 
   @prop({
     type: () => String,
     enum: HousingType,
     required: true
   })
-  public housingType!: HousingType;
+  public housingType: HousingType;
 
   @prop({ required: true })
-  public roomCount!: number;
+  public roomCount: number;
 
   @prop({ required: true })
-  public guestCount!: number;
+  public guestCount: number;
 
   @prop({ required: true })
-  public price!: number;
+  public price: number;
 
   @prop({ required: true, allowMixed: Severity.ALLOW })
-  public facilities!: string[];
+  public facilities: string[];
 
   @prop({
     ref: UserEntity,
     required: true
   })
-  public userId!: Ref<UserEntity>;
+  public userId: Ref<UserEntity>;
 
   @prop({ required: true, allowMixed: Severity.ALLOW })
-  public location!: Location;
+  public location: Location;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

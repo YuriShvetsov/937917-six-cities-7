@@ -20,12 +20,8 @@ export class MongoDatabaseClient implements DatabaseClient {
     this.isConnected = false;
   }
 
-  public isConnectedToDatabase() {
-    return this.isConnected;
-  }
-
   public async connect(uri: string): Promise<void> {
-    if (this.isConnectedToDatabase()) {
+    if (this.isConnected) {
       this.logger.warn('MongoDB client already connected');
       return;
     }
@@ -50,12 +46,12 @@ export class MongoDatabaseClient implements DatabaseClient {
   }
 
   public async disconnect(): Promise<void> {
-    if (!this.isConnectedToDatabase()) {
+    if (!this.isConnected) {
       this.logger.warn('Not connected to the database');
       return;
     }
 
-    await this.mongoose.disconnect?.();
+    await this.mongoose.disconnect();
 
     this.isConnected = false;
     this.logger.info('Database connection closed.');

@@ -15,24 +15,27 @@ import { ConsoleLogger } from '../../shared/libs/logger/console.logger.js';
 import { DEFAULT_DB_PORT } from './command.constant.js';
 
 export class ImportCommand implements Command {
+  private salt: string;
+
+  private logger: Logger;
+  private databaseClient: DatabaseClient;
+
   private userService: UserService;
   private offerService: OfferService;
   private favoriteOfferService: FavoriteOfferService;
   private cityService: CityService;
-  private databaseClient: DatabaseClient;
-  private logger: Logger;
-  private salt: string;
 
   constructor() {
     this.onImportedOffer = this.onImportedOffer.bind(this);
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
     this.logger = new ConsoleLogger();
+    this.databaseClient = new MongoDatabaseClient(this.logger);
+
     this.userService = new DefaultUserService(this.logger, UserModel);
     this.offerService = new DefaultOfferService(this.logger, OfferModel);
     this.favoriteOfferService = new DefaultFavoriteOfferService(this.logger, FavoriteOfferModel);
     this.cityService = new DefaultCityService(this.logger, CityModel);
-    this.databaseClient = new MongoDatabaseClient(this.logger);
   }
 
   public getName(): string {
@@ -53,18 +56,19 @@ export class ImportCommand implements Command {
       role: UserRole[data.user.role]
     }, this.salt);
 
-    await this.favoriteOfferService.findOrCreate({
-      userId: user._id.toString(),
-      items: []
-    });
-
-    const city = await this.cityService.create(data.city);
+    const [city] = await Promise.all([
+      this.cityService.create(data.city),
+      this.favoriteOfferService.findOrCreate({
+        userId: user?.id,
+        items: []
+      })
+    ]);
 
     const offer = await this.offerService.create({
       title: data.title,
       description: data.description,
       publishedAt: data.publishedAt,
-      cityId: city?._id?.toString() ?? null,
+      cityId: city?.id,
       previewImage: data.previewImage,
       images: data.images,
       isPremium: data.isPremium,
@@ -74,12 +78,12 @@ export class ImportCommand implements Command {
       guestCount: data.guestCount,
       price: data.price,
       facilities: data.facilities,
-      userId: user._id.toString(),
+      userId: user?.id,
       location: data.location
     });
 
     if (data.isFavorite) {
-      await this.favoriteOfferService.addItem(user._id.toString(), offer._id.toString());
+      await this.favoriteOfferService.addItem(user?.id, offer?.id);
     }
   }
 

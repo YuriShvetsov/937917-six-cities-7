@@ -28,12 +28,7 @@ export class DefaultFavoriteOfferService implements FavoriteOfferService {
 
   public async findOrCreate(dto: CreateFavoriteOfferDto): Promise<DocumentType<FavoriteOfferEntity>> {
     const foundFavoriteOffer = await this.findByUserId(dto.userId);
-
-    if (foundFavoriteOffer) {
-      return foundFavoriteOffer;
-    }
-
-    return this.create(dto);
+    return foundFavoriteOffer ?? this.create(dto);
   }
 
   public async findByUserId(userId: string): Promise<DocumentType<FavoriteOfferEntity> | null> {

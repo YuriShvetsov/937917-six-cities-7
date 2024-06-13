@@ -1,5 +1,5 @@
 import { OfferGenerator } from './offer-generator.interface.js';
-import { MockServerData, Location, City, User } from '../../types/index.js';
+import { MockServerData, Location } from '../../types/index.js';
 import {
   generateRandomValue,
   getRandomItem,
@@ -29,8 +29,8 @@ export class TSVOfferGenerator implements OfferGenerator {
 
   public generate(): string {
     const facilitiesCount = generateRandomValue(MIN_FACILITIES_COUNT, MAX_FACILITIES_COUNT);
-    const city: City = getRandomItem(this.mockData.cities);
-    const user: User = getRandomItem(this.mockData.users);
+    const city = getRandomItem(this.mockData.cities);
+    const user = getRandomItem(this.mockData.users);
 
     const title = getRandomItem(this.mockData.titles);
     const description = getRandomItem(this.mockData.descriptions);

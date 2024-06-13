@@ -16,14 +16,14 @@ export class FavoriteOfferEntity {
     required: true,
     unique: true
   })
-  public userId!: Ref<UserEntity>;
+  public userId: Ref<UserEntity>;
 
   @prop({
     required: true,
     default: [],
     allowMixed: Severity.ALLOW
   })
-  public items!: string[];
+  public items: string[];
 }
 
 export const FavoriteOfferModel = getModelForClass(FavoriteOfferEntity);
